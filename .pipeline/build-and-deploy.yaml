@@ -43,7 +43,7 @@ pipeline:
                     repo: harness-gitops-workshop
                     tags:
                       - latest
-                      - v-<+stage.variables.imageTag>
+                      - <+pipeline.variables.imageTag>
                     dockerfile: /harness/harness-gitops-workshop/apps/podinfo/Dockerfile
                     context: /harness/harness-gitops-workshop/apps/podinfo
                     resources:
@@ -107,3 +107,9 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+  variables:
+    - name: imageTag
+      type: String
+      description: ""
+      required: false
+      value: <+input>
