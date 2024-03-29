@@ -1,5 +1,6 @@
 inputSet:
   name: podinfo-inputsets
+  tags: {}
   identifier: podinfoinputsets
   orgIdentifier: default
   projectIdentifier: default_project
@@ -8,4 +9,4 @@ inputSet:
     variables:
       - name: imageTag
         type: String
-        value: <+trigger.baseCommitSha>
+        value: <+trigger.commitSha>
