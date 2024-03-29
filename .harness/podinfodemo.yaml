@@ -3,3 +3,33 @@ service:
   identifier: podinfodemo
   orgIdentifier: default
   projectIdentifier: default_project
+  serviceDefinition:
+    spec:
+      manifests:
+        - manifest:
+            identifier: podinfodemo
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: githubfrozenwings
+                  gitFetchType: Branch
+                  paths:
+                    - podinfo-manifest
+                  repoName: harness-gitops-workshop
+                  branch: build-and-deploy
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: dockerhub
+                imagePath: frozenwings/harness-gitops-workshop
+                tag: <+input>
+                digest: ""
+              identifier: podinfodemo
+              type: DockerRegistry
+    type: Kubernetes
