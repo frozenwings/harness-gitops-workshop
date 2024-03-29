@@ -23,7 +23,7 @@ service:
               enableDeclarativeRollback: false
       artifacts:
         primary:
-          primaryArtifactRef: <+input>
+          primaryArtifactRef: podinfodemo
           sources:
             - spec:
                 connectorRef: dockerhub
