@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: podinfo-demo
+  identifier: podinfodemo
+  orgIdentifier: default
+  projectIdentifier: default_project
+  environmentRef: podinfodemo
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: edge
+    namespace: developer-platform-harness-research
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
