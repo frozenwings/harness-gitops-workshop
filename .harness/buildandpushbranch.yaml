@@ -1,0 +1,11 @@
+inputSet:
+  name: build-and-push-branch
+  identifier: buildandpushbranch
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: buildanddeploy
+    variables:
+      - name: imageTag
+        type: String
+        value: <+trigger.commitSha>
