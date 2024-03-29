@@ -50,12 +50,6 @@ pipeline:
                       limits:
                         memory: 2000M
                         cpu: "2"
-        variables:
-          - name: imageTag
-            type: String
-            description: ""
-            required: false
-            value: <+input>
     - stage:
         name: deploy-to-edge
         identifier: deploytoedge
