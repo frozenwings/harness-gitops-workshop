@@ -1,0 +1,57 @@
+pipeline:
+  name: simple-cicd
+  identifier: simplecicd
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: build-and-push
+        identifier: buildandpush
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: false
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: edge
+              namespace: developer-platform-harness-research
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: GitClone
+                  name: GitClone_1
+                  identifier: GitClone_1
+                  spec:
+                    connectorRef: githubfrozenwings
+                    repoName: harness-gitops-workshop
+                    cloneDirectory: /harness/simple-cicd
+                    build:
+                      type: branch
+                      spec:
+                        branch: simple-cicd
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: dockerhub
+                    repo: frozenwings/harness-gitops-workshop
+                    tags:
+                      - <+pipeline.variables.imageTag>
+                    dockerfile: /harness/simple-cicd/apps/podinfo/Dockerfile
+                    context: /harness/simple-cicd/apps/podinfo
+                    resources:
+                      limits:
+                        memory: 2000M
+                        cpu: "2"
+  variables:
+    - name: imageTag
+      type: String
+      description: ""
+      required: false
+      value: <+input>
