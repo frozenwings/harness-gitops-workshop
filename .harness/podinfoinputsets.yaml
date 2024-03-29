@@ -1,0 +1,11 @@
+inputSet:
+  name: podinfo-inputsets
+  identifier: podinfoinputsets
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: buildanddeploy
+    variables:
+      - name: imageTag
+        type: String
+        value: <+trigger.baseCommitSha>
