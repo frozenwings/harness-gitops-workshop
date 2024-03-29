@@ -28,7 +28,7 @@ service:
             - spec:
                 connectorRef: dockerhub
                 imagePath: frozenwings/harness-gitops-workshop
-                tag: <+input>
+                tag: <+pipeline.variables.imageTag>
                 digest: ""
               identifier: podinfodemo
               type: DockerRegistry
