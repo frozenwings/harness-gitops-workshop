@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: simple-cicd
+  identifier: simplecicd
+  orgIdentifier: default
+  projectIdentifier: default_project
+  environmentRef: simplecicd
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: edge
+    namespace: developer-platform-harness-research
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
