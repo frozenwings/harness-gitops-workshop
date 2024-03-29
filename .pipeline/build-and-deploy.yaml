@@ -39,7 +39,7 @@ pipeline:
                   name: BuildAndPushDockerRegistry_1
                   identifier: BuildAndPushDockerRegistry_1
                   spec:
-                    connectorRef: account.harnessImage
+                    connectorRef: dockerhub
                     repo: harness-gitops-workshop
                     tags:
                       - latest
