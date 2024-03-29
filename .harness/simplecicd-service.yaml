@@ -1,0 +1,36 @@
+service:
+  name: simple-cicd
+  identifier: simplecicd
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: simplecicd
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: githubfrozenwings
+                  gitFetchType: Branch
+                  paths:
+                    - podinfo-manifest
+                  repoName: harness-gitops-workshop
+                  branch: simple-cicd
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: dockerhub
+                imagePath: frozenwings/harness-gitops-workshop
+                tag: <+pipeline.variables.imageTag>
+                digest: ""
+              identifier: simplecicd
+              type: DockerRegistry
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: default_project
