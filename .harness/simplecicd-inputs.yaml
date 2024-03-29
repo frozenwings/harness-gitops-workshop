@@ -1,0 +1,25 @@
+inputSet:
+  name: simple-cicd
+  identifier: simplecicd
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: simplecicd
+    stages:
+      - stage:
+          identifier: deploy
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: <+input>
+                        sources: <+input>
+    variables:
+      - name: imageTag
+        type: String
+        value: <+trigger.commitSha>
