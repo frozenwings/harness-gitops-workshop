@@ -1,0 +1,108 @@
+pipeline:
+  name: build-and-deploy
+  identifier: buildanddeploy
+  projectIdentifier: default_project
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: build-and-push
+        identifier: buildandpush
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: false
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: edge
+              namespace: developer-platform-harness-research
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: GitClone
+                  name: GitClone_1
+                  identifier: GitClone_1
+                  spec:
+                    connectorRef: githubfrozenwings
+                    repoName: harness-gitops-workshop
+                    cloneDirectory: /harness/harness-gitops-workshop
+                    build:
+                      type: branch
+                      spec:
+                        branch: build-and-deploy
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: account.harnessImage
+                    repo: harness-gitops-workshop
+                    tags:
+                      - latest
+                      - v-<+stage.variables.imageTag>
+                    dockerfile: /harness/harness-gitops-workshop/apps/podinfo/Dockerfile
+                    context: /harness/harness-gitops-workshop/apps/podinfo
+                    resources:
+                      limits:
+                        memory: 2000M
+                        cpu: "2"
+        variables:
+          - name: imageTag
+            type: String
+            description: ""
+            required: false
+            value: ""
+    - stage:
+        name: deploy-to-edge
+        identifier: deploytoedge
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: podinfodemo
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      sources:
+                        - identifier: podinfo
+                          type: DockerRegistry
+                          spec:
+                            tag: <+input>
+          environment:
+            environmentRef: podinfodemo
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: podinfodemo
+          execution:
+            steps:
+              - step:
+                  name: Rollout Deployment
+                  identifier: rolloutDeployment
+                  type: K8sRollingDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
