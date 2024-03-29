@@ -1,7 +1,0 @@
-environment:
-  name: podinfodemo
-  identifier: podinfodemo
-  accountId: 5YC8ABAiRMycsTofEQ9gaA
-  orgIdentifier: default
-  projectIdentifier: default_project
-  type: Production
