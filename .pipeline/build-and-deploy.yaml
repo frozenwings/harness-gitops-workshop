@@ -40,7 +40,7 @@ pipeline:
                   identifier: BuildAndPushDockerRegistry_1
                   spec:
                     connectorRef: dockerhub
-                    repo: harness-gitops-workshop
+                    repo: frozenwings/harness-gitops-workshop
                     tags:
                       - latest
                       - <+pipeline.variables.imageTag>
