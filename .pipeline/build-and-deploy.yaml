@@ -55,7 +55,7 @@ pipeline:
             type: String
             description: ""
             required: false
-            value: ""
+            value: <+input>
     - stage:
         name: deploy-to-edge
         identifier: deploytoedge
