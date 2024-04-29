@@ -95,3 +95,8 @@ pipeline:
       description: ""
       required: false
       value: <+input>
+    - name: newTag
+      type: String
+      description: ""
+      required: false
+      value: "123"
